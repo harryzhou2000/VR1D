@@ -1,4 +1,4 @@
-
+clear;
 nvar = 1;
 ppoly = 3;
 
@@ -7,7 +7,11 @@ xs = linspace(0,1,N+1);
 xc = 0.5*(xs(2:end) + xs(1:end-1));
 
 % u = sin(xc*2*pi);
-u = double(abs(xc - 0.5)<0.25) * (0) + cos(xc * 2* pi);
+fAna = @(xc) double(abs(xc - 0.5)<0.25) * (0) + cos(xc * 2* pi);
+u = fAna(xc);
+for icell = 1:N
+   u(:,icell) = F_1DInt(@(iG, xi) fAna(xs(icell) + (xs(icell+1)-xs(icell)) * (xi+1)/2)) / 2;
+end
 
 
 urec = F_VR1D_ArrayInit(u,ppoly);
@@ -46,9 +50,9 @@ rec = F_VR1D_GetRecMat(xs,xc,ppoly,rec);
 cla;
 [urec, WG] = F_VR1D_StaticRec_C0(urec,u,rec,xs,xc);
 V_VR1DPlotOneVar(gca,xs,xc,u,urec,rec,1,10);
+err = F_VR1D_GetErr(xs, xc, u, urec, rec, 1, fAna);
 
-
-
+fprintf("abs err = %e\n", err);
 
 
 

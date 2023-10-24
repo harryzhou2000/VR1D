@@ -3,7 +3,7 @@ function [urec,WG_dist] = F_VR1D_StaticRec(urec, u, rec, xs, xc)
 N = rec.N;
 urec_lin = urec;
 
-resTh_rec = 1e-4;
+resTh_rec = 1e-8;
 max_iter = 1000;
 
 WG_lin = ones(1,N);

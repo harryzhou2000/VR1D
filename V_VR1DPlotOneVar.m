@@ -1,4 +1,4 @@
-function f = V_VR1DPlotOneVar(f, xs, xc, u, urec,rec, ivar, nsamp)
+function [f] = V_VR1DPlotOneVar(f, xs, xc, u, urec,rec, ivar, nsamp)
 
 N = size(xs,2)-1;
 nrec = size(urec,1);
@@ -19,7 +19,7 @@ for icell = 1:N
     plot(f,xsamp,vsamp);
     plot(xC,u(ivar,icell),'.');
     
-    
+   
 end
 
 hold off;

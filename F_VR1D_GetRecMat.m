@@ -2,8 +2,8 @@ function rec = F_VR1D_GetRecMat(xs,xc, ppoly,rec)
 
 N = size(xs,2)-1;
 nrec = ppoly;
-WD = [1,1,1/2,1/6];
-wGG = 1;
+WD = [10,1,1/2,1/6];
+wGG = 0;
 
 rec.nrec = nrec;
 rec.N = N;
@@ -25,7 +25,7 @@ rec.b_R = zeros(nrec,N);
 for icell = 1:N
     coords = xs(icell:icell+1);
     xC = xc(icell);
-    baseMoment = F_1DInt(@(i,xi) F_VR1D_DiffBaseValue(xC,xi,coords,zeros(1,nrec),zeros(1,nrec)) );
+    baseMoment = F_1DInt(@(i,xi) F_VR1D_DiffBaseValue(xC,xi,coords,zeros(1,nrec),zeros(1,nrec)) ) / 2;
     rec.baseMoment(:,icell) = baseMoment';
     
 end
@@ -75,17 +75,17 @@ for icell = 1:N
     rec.b_R(:,icell) = F_VR1D_FaceFunctional(1,DI_R(1,:), WDGR(1))';
 
     intDiBj = F_1DInt(@(iG, xi) F_VR1D_DiffBaseValue(xC,xi,coords,moment,zeros(nrec + 1, nrec)) );
-    intD1Bj = intDiBj(2, :) * reflenI;
-    A_GG_h = -(DI_R(1,:) - DI_L(1,:)) / 2 + intD1Bj;
+    intD1Bj = intDiBj(2, :)  * (reflenI / 2);
+    A_GG_h = (DI_R(1,:) - DI_L(1,:)) / 2 - intD1Bj;
     A_GG = A_GG_h' * A_GG_h;
     BR_GG_h = +DR_L(1,:) / 2;
     BL_GG_h = -DL_R(1,:) / 2;
 
-    BR_GG = A_GG_h' * BR_GG_h;
-    BL_GG = A_GG_h' * BL_GG_h;
+    BR_GG = -A_GG_h' * BR_GG_h;
+    BL_GG = -A_GG_h' * BL_GG_h;
 
-    br_GG = A_GG_h' * ( 1/2);
-    bl_GG = A_GG_h' * (-1/2);
+    br_GG = -A_GG_h' * ( 1/2);
+    bl_GG = -A_GG_h' * (-1/2);
 
     
     rec.Aii_C(:,:,icell) = rec.Aii_C(:,:,icell) +  A_GG * wGG;
