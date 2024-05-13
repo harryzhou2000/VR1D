@@ -24,8 +24,9 @@ u = double(abs(xc - 0.5)<0.25) * (1) + cos(xc * 2* pi)*(-0);
 field.xc = xc;
 field.xs = xs;
 field.hs = hs;
-field.urec = F_VR1D_ArrayInit(u,ppoly);
+field.rec.name = "rec";
 field.rec = F_VR1D_GetRecMat(xs,xc,ppoly,[]);
+field.urec = F_VR1D_ArrayInit(u,field.rec);
 field.ithis = 1:N;
 field.ile = circshift(field.ithis, 1,2);
 field.iri = circshift(field.ithis,-1,2);
@@ -38,7 +39,7 @@ for iiter = 1:niter
     [dudt0,field] = frhs(u,field);
     u1 = u + dt * dudt0;
     cla;
-    V_VR1DPlotOneVar(gca,field.xs,field.xc,u,field.urec,field.rec,1,10);
+    V_VR1DPlotOneVar(gca,field.xs,field.xc,u,field.urec,field.rec,1,10,0);
     xlim([0,1]);
     ylim('auto');
     
@@ -49,7 +50,7 @@ for iiter = 1:niter
     t = t + dt;
     if(mod(iiter,see) == 0 || iiter == niter)
         cla;
-        V_VR1DPlotOneVar(gca,field.xs,field.xc,u,field.urec,field.rec,1,10);
+        V_VR1DPlotOneVar(gca,field.xs,field.xc,u,field.urec,field.rec,1,10,0);
         xlim([0,1]);
         ylim('auto');
         drawnow;

@@ -20,9 +20,9 @@ for icell = 1:N
     DL_R = rec.DiBj_FR(:,:,icellL);
     
     
-    UL = DL_R * urec(:,:,icellL);
+    UL = DL_R * urec(1:nrec,:,icellL);
     UL(1,:) = UL(1,:)+u(:,icellL)';
-    UR = DI_L * urec(:,:,icell);
+    UR = DI_L * urec(1:nrec,:,icell);
     UR(1,:) = UR(1,:)+u(:,icell)';
     
     UDIFF = UL-UR;
